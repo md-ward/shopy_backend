@@ -1,17 +1,37 @@
-const express = require('express');
-const router = express.Router();
-const productsController = require('../controllers/products_controller')
+const express = require("express");
+const productRouts = express.Router();
+const productsController = require("../controllers/productsController");
+const multer = require("multer");
+const adminAuthCheckMiddleware = require("../../global/adminAuthCheckMiddlewear");
+const upload = multer();
+//! Route to get all products
+productRouts.get("/", productsController.getAllProducts);
+productRouts.get("/get/:id", productsController.getSingleProduct);
 
-// Route to get all products
-router.get('/get', productsController.getAllProducts);
+//! Route to create a new product
+productRouts.post(
+  "/add",
+  adminAuthCheckMiddleware,
+  upload.none(),
+  productsController.createProduct
+);
+productRouts.put(
+  "/update/:productId",
+  adminAuthCheckMiddleware,
+  upload.none(),
+  productsController.updateProduct
+);
 
-// Route to get the count of all products
-router.get('/count', productsController.getCount);
+//! Route to remove a product by ID
+productRouts.delete(
+  "/delete/:productId",
+  adminAuthCheckMiddleware,
+  productsController.removeProducts
+);
+//! Route to apply filters
+productRouts.get("/filter", productsController.applyFilters);
 
-// Route to create a new product
-router.post('/add', productsController.createProduct);
+//! Route to search products
+productRouts.get("/search", productsController.searchProducts);
 
-// Route to remove a product by ID
-router.delete('delete/:productId', productsController.removeProducts);
-
-module.exports = router;
+module.exports = productRouts;

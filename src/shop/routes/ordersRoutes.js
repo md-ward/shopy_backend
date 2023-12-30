@@ -1,14 +1,36 @@
-const express = require('express');
-const router = express.Router();
-const { createOrder, getOrders, deleteOrderById } = require('../controllers/orders_controller');
+const express = require("express");
+const orderRoutes = express.Router();
+const {
+  createOrder,
+  getOrders,
+  deleteOrderById,
+  getOrderDetails,
+  updateOrderStatus,
+  getUserOrders,
+} = require("../controllers/ordersController");
+const userAuthCheckMiddleware = require("../../global/userAuthCeckMiddlewear");
+const adminAuthCheckMiddleware = require("../../global/adminAuthCheckMiddlewear");
+const multer = require("multer");
+const upload = multer();
+orderRoutes.get("/user", userAuthCheckMiddleware, getUserOrders);
+
+orderRoutes.get("/user/:orderId", userAuthCheckMiddleware, getOrderDetails);
+orderRoutes.put("/user/:orderId", userAuthCheckMiddleware, updateOrderStatus);
 
 // Create a new order
-router.post('/newOrder', createOrder);
+orderRoutes.post("/add", upload.none(), userAuthCheckMiddleware, createOrder);
 
 // Get all orders with user and product details
-router.get('/get', getOrders);
+orderRoutes.get("/", adminAuthCheckMiddleware, getOrders);
+orderRoutes.get("/:orderId", adminAuthCheckMiddleware, getOrderDetails);
+orderRoutes.put("/:orderId", adminAuthCheckMiddleware, updateOrderStatus);
 
 // Delete an order by ID
-router.delete('/delete/:orderId', deleteOrderById);
 
-module.exports = router;
+orderRoutes.delete(
+  "/delete/:orderId",
+  adminAuthCheckMiddleware,
+  deleteOrderById
+);
+
+module.exports = orderRoutes;
