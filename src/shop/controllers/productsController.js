@@ -1,4 +1,4 @@
-const Product = require("../models/productsModel");
+  const Product = require("../models/productsModel");
 exports.getAllProducts = async (req, res) => {
   try {
     const totalCount = await Product.countDocuments();
