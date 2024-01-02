@@ -2,6 +2,7 @@ const User = require("../../registeration/models/registeringModel");
 const Comments = require("../../comments/models/commentsModel");
 const Order = require("../../shop/models/ordersModel");
 const Products = require("../../shop/models/productsModel");
+const ContactUs = require("../../shop/models/contactusModel");
 const getStatistics = async (req, res) => {
   try {
     const registeredUsers = await User.countDocuments();
@@ -11,6 +12,7 @@ const getStatistics = async (req, res) => {
     const totalOrders = await Order.countDocuments();
 
     const totalProducts = await Products.countDocuments();
+    const totalContactMessages = await ContactUs.countDocuments();
 
     const totalSalesRevenue = await Order.aggregate([
       { $group: { _id: null, total: { $sum: "$totalPrice" } } },
@@ -82,15 +84,16 @@ const getStatistics = async (req, res) => {
       totalComments,
       totalOrders,
       totalProducts,
+      totalContactMessages,
       totalSalesRevenue: totalSalesRevenue[0]?.total || 0,
       averageProductRating: averageProductRating[0]?.averageRating || 0,
       popularProducts,
     };
 
-    res.json(statistics);
+    res.status(200).send(statistics);
   } catch (error) {
     console.error("Error fetching statistics:", error);
-    res.status(500).json({ error: "Failed to fetch statistics" });
+    res.status(500).send({ error: "Failed to fetch statistics" });
   }
 };
 

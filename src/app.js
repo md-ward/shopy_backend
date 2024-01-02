@@ -15,6 +15,7 @@ const session = require("express-session");
 const cartRouts = require("./shop/routes/cartRouts");
 const orderRoutes = require("./shop/routes/ordersRoutes");
 const commenstRoutes = require("./comments/routes/commentsRouts");
+const contactusRouter = require("./shop/routes/contactusRoutes");
 // Middleware
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -27,7 +28,7 @@ app.use(
       "http://192.168.1.7:5173",
       "http://localhost:4173",
     ],
-    methods: ["POST", "PUT", "GET", "OPTIONS", "HEAD"],
+    methods: ["POST", "PUT", "GET", "DELETE","OPTIONS", "HEAD"],
     credentials: true,
   })
 );
@@ -55,8 +56,9 @@ app.use("/products", productRouts);
 app.use("/categories", categoriesRoutes);
 
 app.use("/order", orderRoutes);
-app.use("/comments", commenstRoutes);
 
+app.use("/comments", commenstRoutes);
+app.use("/contact", contactusRouter);
 // //! cart session handling ...
 // app.use("/cart", cartRouts);
 

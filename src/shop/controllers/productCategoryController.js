@@ -26,7 +26,7 @@ exports.createProductCategory = async (req, res) => {
 exports.getAllProductCategories = async (req, res) => {
   try {
     const categories = await product_categoryModel.find();
-    // console.log(categories);
+    console.log(categories);
     res.status(200).json({ categories });
   } catch (error) {
     console.log(error);

@@ -26,7 +26,11 @@ const productSchema = mongoose.Schema({
     default: 1,
   },
 
-
+  featured: {
+    type: Boolean,
+    required: false,
+    default: false,
+  },
   rate: {
     type: Number,
     required: false,
@@ -41,8 +45,6 @@ const productSchema = mongoose.Schema({
   category: [
     {
       type: Schema.Types.String,
-      // ref: "Product Category",
-      // required: true,
     },
   ],
 

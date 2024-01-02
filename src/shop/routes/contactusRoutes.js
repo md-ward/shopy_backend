@@ -1,18 +1,26 @@
 const { Router } = require("express");
-const { getAllContacts, removeMessage, createMessage, getAllContactsCount } = require("../controllers/contactus_controller");
+const {
+  createMessage,
+  getAllContacts,
+  removeMessage,
+  getAllContactsCount,
+} = require("../controllers/contactUsController");
+const multer = require("multer");
+
+const upload = multer();
 
 //! Create a new router instance
 const contactusRouter = Router();
 
 //! Route to create a new contact form submission
-contactusRouter.post('/new_message', createMessage);
+contactusRouter.post("/", upload.none(), createMessage);
 
 //! Route to get all contact form submissions
-contactusRouter.get('/get', getAllContacts);
-contactusRouter.get('/count', getAllContactsCount)
+contactusRouter.get("/", getAllContacts);
 
 //! Route to delete a contact form submission by ID
-contactusRouter.delete('/delete', removeMessage);
+contactusRouter.delete("/:messageId", removeMessage);
 
+contactusRouter.get("/count", getAllContactsCount);
 //! Export the router instance
 module.exports = contactusRouter;
